@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 const Header = () => {
-  return(
+  return (
     <>
-    <Navigation>
-        <Logo><img src="" alt="logo"/></Logo>
+      <Navigation>
+        <Logo>
+          <img src="" alt="logo" />
+        </Logo>
         <NavItem href="#">스터디/프로젝트</NavItem>
         <NavItem href="#">멘토링</NavItem>
         <NavItem href="#">커뮤니티</NavItem>
       </Navigation>
     </>
-);
-}
+  );
+};
 
 export default Header;
 
@@ -22,8 +24,7 @@ const Navigation = styled.nav`
   display: flex;
 `;
 
-const Logo = styled.p`
-`
+const Logo = styled.p``;
 const NavItem = styled.a`
   color: Black;
   text-decoration: none;
