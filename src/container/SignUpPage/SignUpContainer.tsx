@@ -1,100 +1,90 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/header";
+import Footer from "@/components/footer";
+import { useForm } from "react-hook-form";
 
 function SignUpContainer() {
-
-  const [signUpForm, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    nickname: "",
-    role: ""
+  const { handleSubmit, register } = useForm({
+    mode: "onChange",
   });
 
-  const [isClicked, setIsClicked] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
+  const [isPasswordChecked, setIsPasswordChecked] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...signUpForm, [name]: value });
-  };
+  const onSubmit = (data:any) => {
+    const { password, checkPassword } = data;
 
-  const handleRoleChange = (role: string) => {
-    setFormData({ ...signUpForm, role });
+
+    if (password !== checkPassword) {
+      console.log("비밀번호 확인이 일치하지 않습니다.");
+    } else {
+    //
+    }
   };
 
   return (
-    <>
+    <Wrapper>
       <Header />
       <Container>
-        <FormContainer>
-        <Title>회원가입</Title>
-          <RoleButtonContainer>
-            <RoleButton
-              selected={signUpForm.role == "mentor"}
-              onClick={() => handleRoleChange("mentor")}
-            >
-              멘토
-            </RoleButton>
-            <RoleButton
-              selected={signUpForm.role == "mentee"}
-              onClick={() => handleRoleChange("mentee")}
-              >
-              멘티
-            </RoleButton>
-          </RoleButtonContainer>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
+          <Title>회원가입</Title>
           <InputField>
-            <Inputname>이름</Inputname>
             <Input
+              {...register("nickname")}
               placeholder="이름을 입력하세요."
-              type="text"
-              name="username"
-              value={signUpForm.username}
-              onChange={handleChange}
-            />
-          </InputField>
-          <InputField>
-            <Inputname>이메일</Inputname>
-            <Input
-              placeholder="이메일을 입력하세요."
-              type="email"
-              name="email"
-              value={signUpForm.email}
-              onChange={handleChange}
-            />
-          </InputField>
-          <InputField>
-            <Inputname>닉네임</Inputname>
-            <Input
-              placeholder="닉네임을 입력하세요."
-              type="text"
               name="nickname"
-              value={signUpForm.nickname}
-              onChange={handleChange}
+              type="text"
             />
           </InputField>
           <InputField>
-            <Inputname>비밀번호</Inputname>
             <Input
+              {...register("email")}
+              placeholder="이메일을 입력하세요."
+              name="email"
+              type="email"
+            />
+          </InputField>
+          <InputField>
+            <Input
+              {...register("password")}
               placeholder="비밀번호를 입력하세요."
               type="password"
               name="password"
-              value={signUpForm.password}
-              onChange={handleChange}
             />
           </InputField>
-          <Button type="submit">가입하기</Button>
-          Or 소셜로그인
-          <Button type="button">카카오로 시작하기</Button>
+          <InputField>
+            <Input
+              {...register("checkPassword")}
+              placeholder="비밀번호를 다시 입력하세요."
+              type="password"
+              name="checkPassword"
+            />
+          </InputField>
+          <SubmitButton type="submit">가입하기</SubmitButton>
+          <OrText>Or 소셜로그인</OrText>
+          <SocialButton type="button">카카오로 시작하기</SocialButton>
         </FormContainer>
       </Container>
-    </>
+      <Footer/>
+    </Wrapper>
   );
 }
 
 export default SignUpContainer;
 
+const Wrapper = styled.div`
+  display: flex;
+  background-color: #eae8ff;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+`;
+
 const Title = styled.h1`
+  display: flex;
+  margin-bottom: 30px;
   font-size: 20px;
   text-align: center;
 `;
@@ -103,55 +93,62 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f2f2f2;
+  padding: 100px;
+  background-color: white;
+  border-radius: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 `;
 
 const FormContainer = styled.form`
-  max-width: 400px;
-  width: 100%;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
-
 const InputField = styled.div`
   margin-bottom: 15px;
 `;
-
-const Inputname = styled.label`
-  display: block;
-  margin-bottom: 5px;
-`;
-
 const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
+  width: 300px;
+  padding: 10px;
+  font-size: 15px;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 15px;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #5649ea;
+  }
 `;
 
-const RoleButtonContainer = styled.div`
-  display: flex;
-  margin-bottom: 15px;
-`;
-
-const RoleButton = styled.button<{ selected: boolean }>`
-  flex: 1;
-  padding: 10px;
-  background-color: ${({ selected }) => (selected ? "#5649EA" : "#fff")};
-  color: ${({ selected }) => (selected ? "#fff" : "#5649EA")};
-  border: 1px solid #5649EA;
-  border-radius: 3px;
-  cursor: pointer;
-`;
-
-const Button = styled.button`
+const SubmitButton = styled.button`
   width: 100%;
-  padding: 10px;
-  background-color: #5649EA;
-  color: #fff;
+  padding: 10px; 
+  font-size: 18px; 
+  background-color: #5649ea;
+  color: white;
   border: none;
-  border-radius: 3px;
+  border-radius: 15px;
   cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #453ac4;
+  }
+`;
+
+const OrText = styled.div`
+  font-size: 15px;
+  margin-bottom: 15px; 
+`;
+
+const SocialButton = styled(SubmitButton)`
+  background-color: #fee500;
+  color: black;
+
+  &:hover {
+    background-color: #e0cb08;
+  }
 `;
