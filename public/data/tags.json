@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Programming"
+  },
+  {
+    "id": 2,
+    "name": "JavaScript"
+  },
+  {
+    "id": 3,
+    "name": "Python"
+  },
+  {
+    "id": 4,
+    "name": "DataAnalysis"
+  },
+  {
+    "id": 5,
+    "name": "Spring"
+  },
+  {
+    "id": 6,
+    "name": "WebDevelopment"
+  },
+  {
+    "id": 7,
+    "name": "FrontEnd"
+  },
+  {
+    "id": 8,
+    "name": "BackEnd"
+  },
+  {
+    "id": 9,
+    "name": "Database"
+  },
+  {
+    "id": 10,
+    "name": "Cloud"
+  }
+]

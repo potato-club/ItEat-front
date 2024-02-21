@@ -3,37 +3,69 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "@/components/Footer";
 import { useForm } from "react-hook-form";
+import tags from "../../../public/data/tags.json";
 
-function SignUpContainer() {
-  const { handleSubmit, register } = useForm({
+function SignUpTags() {
+  const { handleSubmit } = useForm({
     mode: "onChange",
   });
 
-
-  const onSubmit = (data:any) => {
+  const [search, setSearch] = useState("");
+  const onChange = (e: any) => {
+    setSearch(e.target.value);
   };
+
+  const filteredTags = tags.filter((tag) => {
+    return tag.name.toLowerCase().includes(search.toLowerCase());
+  });
+
+  const onSubmit = (data: any) => {};
 
   return (
     <Wrapper>
       <Header />
       <Container>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
+          <Title>회원가입</Title>
+          <Input
+            type="text"
+            value={search}
+            onChange={onChange}
+            placeholder="태그를 입력해주세요"
+          />
         </FormContainer>
+        <TagList>
+          {filteredTags.map((tag) => (
+            <Tag key={tag.id}>{tag.name}</Tag>
+          ))}
+        </TagList>
       </Container>
-      <Footer/>
+      <Footer />
     </Wrapper>
   );
 }
 
-export default SignUpContainer;
+export default SignUpTags;
 
 const Wrapper = styled.div`
   display: flex;
-  background-color: #ececec;
+  background-color: #eae8ff;
   justify-content: center;
   align-items: center;
+  color: black;
   flex-direction: column;
+`;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  padding: 100px;
+  background-color: white;
+  border-radius: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 `;
 
 const Title = styled.h1`
@@ -43,26 +75,13 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 100px;
-  background-color: #f2f2f2;
-  border-radius: 20px;
-  margin-top: 50px;
-  margin-bottom: 50px;
-`;
-
 const FormContainer = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 `;
-const InputField = styled.div`
-  margin-bottom: 15px;
-`;
+
 const Input = styled.input`
   width: 300px;
   padding: 10px;
@@ -75,4 +94,17 @@ const Input = styled.input`
   &:focus {
     border-color: #5649ea;
   }
+`;
+
+const TagList = styled.div`
+  margin-top: 20px;
+`;
+
+const Tag = styled.span`
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px 5px;
+  background-color: #5649ea;
+  color: white;
+  border-radius: 5px;
 `;
