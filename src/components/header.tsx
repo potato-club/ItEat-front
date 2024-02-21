@@ -1,14 +1,76 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+import { IoMdSearch } from "react-icons/io";
+import router, { Router } from "next/router";
+import SearchModal from "./SearchModal";
+
+interface MenuTypes {
+  $isSelected: boolean;
+}
 
 const Header = () => {
+  const [menuState, setMenuState] = useState<number | undefined>(undefined);
+  const [searchState, setSearchState] = useState<boolean>(false);
+
+  const handleSignUpClick = () => {
+    router.push("/signup");
+  };
+  const handleMainClick = () => {
+    router.push("/");
+  };
+
   return (
-    <Wrapper>
-      <Typo>ItEat</Typo>
-      <MenuWrapper>
-        <MenuDiv>스터디/프로젝트</MenuDiv>
-      </MenuWrapper>
-    </Wrapper>
+    <>
+      {searchState && (
+        <>
+          <SearchWrapper>
+            <CloseBtn onClick={() => setSearchState(false)}>닫기</CloseBtn>
+            <SearchModal />
+          </SearchWrapper>
+          <GlobalStyle />
+        </>
+      )}
+      <Wrapper>
+        <Typo onClick={handleMainClick}>EatIt</Typo>
+        <MenuWrapper>
+          <MenuDiv
+            $isSelected={menuState === 0}
+            onClick={() => setMenuState(0)}
+          >
+            스터디
+          </MenuDiv>
+          <MenuDiv
+            $isSelected={menuState === 1}
+            onClick={() => setMenuState(1)}
+          >
+            프로젝트
+          </MenuDiv>
+          <MenuDiv
+            $isSelected={menuState === 2}
+            onClick={() => setMenuState(2)}
+          >
+            멘토링
+          </MenuDiv>
+          <MenuDiv
+            $isSelected={menuState === 3}
+            onClick={() => setMenuState(3)}
+          >
+            커뮤니티
+          </MenuDiv>
+        </MenuWrapper>
+        <LogSignBox>
+          <SearchDiv>
+            <IoMdSearch
+              onClick={() => setSearchState(!searchState)}
+              size={30}
+              color="black"
+            />
+          </SearchDiv>
+          <LoginBtn>로그인</LoginBtn>
+          <SignUpBtn onClick={handleSignUpClick}>회원가입</SignUpBtn>
+        </LogSignBox>
+      </Wrapper>
+    </>
   );
 };
 
@@ -20,7 +82,8 @@ const Wrapper = styled.div`
   background-color: white;
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 5%;
+  justify-content: space-between;
 `;
 
 const Typo = styled.div`
@@ -28,42 +91,78 @@ const Typo = styled.div`
   color: #5649ea;
   font-style: italic;
   font-weight: 700;
+  margin-left: 10%;
+  cursor: pointer;
 `;
 
 const MenuWrapper = styled.div`
+  width: 450px;
+  min-width: 450px;
   position: relative;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10%;
 `;
 
-const MenuDiv = styled.div`
-  font-size: 16px;
-  color: black;
+const MenuDiv = styled.div<MenuTypes>`
+  width: 70px;
+  font-size: 20px;
+  color: ${(props) => (props.$isSelected ? "#5649ea" : "black")};
   font-weight: 500;
   cursor: pointer;
 `;
 
-const ExtendedMenu = styled.div`
-  position: absolute;
-  top: 100%; /* 메뉴 아래에 위치하도록 설정 */
-  left: 0;
-  width: 150px; /* 메뉴의 폭 설정 */
-  background-color: #fff; /* 배경색 설정 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
-  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
+const LogSignBox = styled.div`
+  width: 400px;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 10px;
-  border-radius: 5px;
+  justify-content: space-around;
+  gap: 50px;
+  margin-right: 50px;
+  align-items: center;
 `;
 
-const ExtendedMenuItem = styled.div`
-  font-size: 14px;
-  color: black;
+const LoginBtn = styled.div`
+  width: 70px;
+  font-size: 20px;
+  color: #5649ea;
+  font-weight: 500;
   cursor: pointer;
+`;
+const SignUpBtn = styled.div`
+  width: 70px;
+  font-size: 20px;
+  color: #5649ea;
+  font-weight: 500;
+  cursor: pointer;
+`;
+const SearchWrapper = styled.div`
+  width: 100%;
+  height: 100px;
+  transition: height 0.3s ease;
+`;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    overflow: hidden;
+  }
+`;
+
+const CloseBtn = styled.div`
+  height: 100px;
+  background-color: red;
+  display: flex;
+  justify-content: right;
+`;
+
+const SearchDiv = styled.div`
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
-    color: #5649ea; /* 호버 효과 설정 */
+    background-color: #d0d0d0;
+    border-radius: 50%;
   }
 `;
