@@ -12,14 +12,13 @@ function SignUpContainer() {
   const [isVerify, setIsVerify] = useState(false);
   const [isPasswordChecked, setIsPasswordChecked] = useState(false);
 
-  const onSubmit = (data:any) => {
+  const onSubmit = (data: any) => {
     const { password, checkPassword } = data;
-
 
     if (password !== checkPassword) {
       console.log("비밀번호 확인이 일치하지 않습니다.");
     } else {
-    //
+      //
     }
   };
 
@@ -66,7 +65,7 @@ function SignUpContainer() {
           <SocialButton type="button">카카오로 시작하기</SocialButton>
         </FormContainer>
       </Container>
-      <Footer/>
+      <Footer />
     </Wrapper>
   );
 }
@@ -76,10 +75,10 @@ export default SignUpContainer;
 const Wrapper = styled.div`
   display: flex;
   background-color: #eae8ff;
+  color: black;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
 `;
 
 const Title = styled.h1`
@@ -93,6 +92,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 500px;
   padding: 100px;
   background-color: white;
   border-radius: 20px;
@@ -125,8 +125,8 @@ const Input = styled.input`
 
 const SubmitButton = styled.button`
   width: 100%;
-  padding: 10px; 
-  font-size: 18px; 
+  padding: 10px;
+  font-size: 18px;
   background-color: #5649ea;
   color: white;
   border: none;
@@ -141,7 +141,7 @@ const SubmitButton = styled.button`
 
 const OrText = styled.div`
   font-size: 15px;
-  margin-bottom: 15px; 
+  margin-bottom: 15px;
 `;
 
 const SocialButton = styled(SubmitButton)`
