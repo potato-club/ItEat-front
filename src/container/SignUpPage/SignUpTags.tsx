@@ -16,10 +16,17 @@ function SignUpTags() {
   };
 
   const filteredTags = tags.filter((tag) => {
-    return tag.name.toLowerCase().includes(search.toLowerCase());
+    return tag.name
+      .replace(" ", "")
+      .toLocaleLowerCase()
+      .includes(search.toLocaleLowerCase().replace(" ", ""));
   });
 
   const onSubmit = (data: any) => {};
+
+  // const handleTagClick = (tagName) => {
+  //     setSearch(tagName);
+  // };
 
   return (
     <Wrapper>
@@ -31,7 +38,7 @@ function SignUpTags() {
             type="text"
             value={search}
             onChange={onChange}
-            placeholder="태그를 입력해주세요"
+            placeholder="원하시는 태그를 입력해주세요"
           />
         </FormContainer>
         <TagList>
@@ -61,6 +68,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 500px;
+  height: 500px;
   padding: 100px;
   background-color: white;
   border-radius: 20px;
