@@ -14,9 +14,15 @@ const Header = () => {
 
   const handleSignUpClick = () => {
     router.push("/signup");
+    setMenuState(undefined);
   };
   const handleMainClick = () => {
     router.push("/");
+    setMenuState(undefined);
+  };
+  const mentoringClick = () => {
+    setMenuState(2);
+    router.push("/mentoringPage");
   };
 
   return (
@@ -45,10 +51,7 @@ const Header = () => {
           >
             프로젝트
           </MenuDiv>
-          <MenuDiv
-            $isSelected={menuState === 2}
-            onClick={() => setMenuState(2)}
-          >
+          <MenuDiv $isSelected={menuState === 2} onClick={mentoringClick}>
             멘토링
           </MenuDiv>
           <MenuDiv

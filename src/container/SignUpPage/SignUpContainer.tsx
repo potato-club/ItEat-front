@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Header from "../../components/Header";
-import Footer from "@/components/Footer";
+import Header from "../../components/header";
+import Footer from "@/components/footer";
 import { useForm } from "react-hook-form";
 
 function SignUpContainer() {
@@ -117,7 +117,7 @@ const Input = styled.input`
   border-radius: 15px;
   outline: none;
   transition: border-color 0.3s;
-
+  color: black;
   &:focus {
     border-color: #5649ea;
   }
