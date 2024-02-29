@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import Footer from "@/components/Footer";
 import { useForm } from "react-hook-form";
+import Select, { ValueType, OptionTypeBase } from "react-select";
+
 import tags from "../../../public/data/tags.json";
 
 function SignUpTags() {
@@ -10,23 +12,38 @@ function SignUpTags() {
     mode: "onChange",
   });
 
-  const [search, setSearch] = useState("");
-  const onChange = (e: any) => {
-    setSearch(e.target.value);
+  const [selectedTag, setSelectedTag] =
+    useState<ValueType<OptionTypeBase> | null>(null);
+  const onSubmit = (data: any) => {
+    console.log("Selected Tag:", selectedTag);
   };
 
-  const filteredTags = tags.filter((tag) => {
-    return tag.name
-      .replace(" ", "")
-      .toLocaleLowerCase()
-      .includes(search.toLocaleLowerCase().replace(" ", ""));
-  });
+  const options = tags.map((tag: any) => ({
+    value: tag.name,
+    label: tag.name,
+  }));
 
-  const onSubmit = (data: any) => {};
-
-  // const handleTagClick = (tagName) => {
-  //     setSearch(tagName);
-  // };
+  const customStyles = {
+    control: (provided: any, state: any) => ({
+      ...provided,
+      borderColor: state.isFocused ? "#5649ea" : "#ccc", // 포커스됐을 때 input 보더 색 변경
+    }),
+    multiValue: (provided: any) => ({
+      ...provided,
+      backgroundColor: "#5649ea", // 멀티 값 박스 배경색 변경
+    }),
+    multiValueLabel: (provided: any) => ({
+      ...provided,
+      color: "white", // 박스 텍스트 색상
+    }),
+    multiValueRemove: (provided: any) => ({
+      ...provided,
+      color: "white", // 삭제 아이콘 색상
+      ":hover": {
+        backgroundColor: "#321fdb", // 삭제 아이콘 호버
+      },
+    }),
+  };
 
   return (
     <Wrapper>
@@ -34,18 +51,19 @@ function SignUpTags() {
       <Container>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <Title>회원가입</Title>
-          <Input
-            type="text"
-            value={search}
-            onChange={onChange}
-            placeholder="원하시는 태그를 입력해주세요"
-          />
+          <SelectContainer>
+            <Select
+              options={options}
+              value={selectedTag}
+              onChange={(selectedOption) =>
+                setSelectedTag(selectedOption as ValueType<OptionTypeBase>)
+              }
+              isMulti
+              placeholder="원하는 태그를 선택해주세요"
+              styles={customStyles}
+            />
+          </SelectContainer>
         </FormContainer>
-        <TagList>
-          {filteredTags.map((tag) => (
-            <Tag key={tag.id}>{tag.name}</Tag>
-          ))}
-        </TagList>
       </Container>
       <Footer />
     </Wrapper>
@@ -83,36 +101,13 @@ const Title = styled.h1`
   text-align: center;
 `;
 
+const SelectContainer = styled.div`
+  width: 300px;
+`;
+
 const FormContainer = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-`;
-
-const Input = styled.input`
-  width: 300px;
-  padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  outline: none;
-  transition: border-color 0.3s;
-
-  &:focus {
-    border-color: #5649ea;
-  }
-`;
-
-const TagList = styled.div`
-  margin-top: 20px;
-`;
-
-const Tag = styled.span`
-  display: inline-block;
-  padding: 5px 10px;
-  margin: 5px 5px;
-  background-color: #5649ea;
-  color: white;
-  border-radius: 5px;
 `;
