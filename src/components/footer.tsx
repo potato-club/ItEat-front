@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const Footer = () => {
-  return(
-    <Wrapper>
-        Footer
-      </Wrapper>
-);
-}
+  return <Wrapper>Footer</Wrapper>;
+};
 
 export default Footer;
 

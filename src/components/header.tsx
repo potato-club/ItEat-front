@@ -15,6 +15,9 @@ const Header = () => {
   const handleSignUpClick = () => {
     router.push("/signup");
   };
+  const handleLoginClick = () => {
+    router.push("/login/login");
+  };
   const handleMainClick = () => {
     router.push("/");
   };
@@ -66,7 +69,7 @@ const Header = () => {
               color="black"
             />
           </SearchDiv>
-          <LoginBtn>로그인</LoginBtn>
+          <LoginBtn onClick={handleLoginClick}>로그인</LoginBtn>
           <SignUpBtn onClick={handleSignUpClick}>회원가입</SignUpBtn>
         </LogSignBox>
       </Wrapper>

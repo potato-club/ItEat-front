@@ -1,49 +1,29 @@
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import React, { useState } from "react";
-import Header from "../../components/header";
+import Header from "../../components/Header";
+import Footer from "../../components/footer";
 import Image from "next/image";
 import KakaoImage from "../../../public/LoginImage/Kakao.png";
+import router, { Router } from "next/router";
 
 const LoginContainer = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [loginDisabled, setLoginDisabled] = useState(false);
   const [errStack, setErrStack] = useState(0);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (!/\S+@\S+\.\S+/.test(value)) {
-      setEmailError("올바른 이메일 형식이 아닙니다.");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (!/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/.test(value)) {
-      setPasswordError("영문+숫자 조합 8자 이상 입력해주세요.");
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  const PwVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleLoginClick = () => {
+  const onSubmit = (data: any) => {
     if (loginDisabled) {
       alert("잠시 후 다시 시도해주세요.");
       return;
     }
 
-    if (email === "hoo6710@naver.com" && password === "jiho0419") {
+    if (data.email === "hoo6710@naver.com" && data.password === "jiho0419") {
       alert("로그인 되었습니다!");
     } else {
       alert("아이디와 비밀번호를 다시 한 번 확인해주세요!");
@@ -60,54 +40,98 @@ const LoginContainer = () => {
     }
   };
 
+  const handlePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleFindIdClick = () => {
+    router.push("/login/loginfindid");
+  };
+
+  const handleFindPwClick = () => {
+    router.push("/login/loginfindpw");
+  };
+
+  const handleSignupClick = () => {
+    router.push("/signup/signup");
+  };
+
+  const LoginError: React.FC<{ children: any }> = ({ children }) => (
+    <div style={{ fontSize: "12px", color: "red" }}>{children}</div>
+  );
+
   return (
     <div>
       <Header />
 
       <StyledLogin>
         <LoginTitle>로그인</LoginTitle>
-        <LoginId>
-          <h3>아이디</h3>
-          <input
-            type="email"
-            placeholder="이메일을 입력해주세요."
-            value={email}
-            onChange={handleEmailChange}
-            style={{
-              border: emailError ? "1px solid red" : "1px #D9D9D9 solid",
-            }}
-          />
-          {emailError && <LoginIdError>{emailError}</LoginIdError>}
-        </LoginId>
-        <LoginPw>
-          <h3>비밀번호</h3>
-          <LoginPwVisibility>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <LoginId>
+            <h3>아이디</h3>
             <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={handleChange}
-              placeholder="비밀번호를 입력해주세요."
+              type="email"
+              placeholder="이메일을 입력해주세요."
+              {...register("email", {
+                required: "이메일을 입력하세요.",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "올바른 이메일 형식이 아닙니다.",
+                },
+              })}
               style={{
-                border: passwordError ? "1px solid red" : "1px #D9D9D9 solid",
+                border: errors.email ? "1px solid red" : "1px #D9D9D9 solid",
               }}
             />
-            <PwVisibilityBtn onClick={PwVisibility}>
-              {showPassword ? "Hide" : "View"}
-            </PwVisibilityBtn>
-          </LoginPwVisibility>
-          {passwordError && <LoginPwError>{passwordError}</LoginPwError>}
-        </LoginPw>
-        <LoginBtn onClick={handleLoginClick} disabled={loginDisabled}>
-          로그인
-        </LoginBtn>
+            {errors.email && <LoginError>{errors.email?.message}</LoginError>}
+          </LoginId>
+          <LoginPw>
+            <h3>비밀번호</h3>
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="비밀번호를 입력해주세요."
+                {...register("password", {
+                  required: "비밀번호를 입력하세요.",
+                  minLength: {
+                    value: 8,
+                    message: "영문+숫자 조합 8자 이상 입력해주세요.",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
+                    message: "영문+숫자 조합 8자 이상 입력해주세요.",
+                  },
+                })}
+                style={{
+                  border: errors.password
+                    ? "1px solid red"
+                    : "1px #D9D9D9 solid",
+                }}
+              />
+              <PwVisibilityBtn type="button" onClick={handlePasswordVisibility}>
+                {showPassword ? "Hide" : "View"}
+              </PwVisibilityBtn>
+            </div>
+            {errors.password && (
+              <LoginError>{errors.password?.message}</LoginError>
+            )}
+          </LoginPw>
+          <LoginBtn type="submit" disabled={loginDisabled}>
+            로그인
+          </LoginBtn>
+        </form>
         <LoginSaveFind>
           <LoginSave>
             <input type="checkbox" />
             <label>자동 로그인</label>
           </LoginSave>
           <LoginFind>
-            <a href="#">아이디 찾기 |</a>
-            <a href="#"> 비밀번호 찾기</a>
+            <LoginFindIdBtn onClick={handleFindIdClick}>
+              아이디 찾기 |
+            </LoginFindIdBtn>
+            <LoginFindPwBtn onClick={handleFindPwClick}>
+              비밀번호 찾기
+            </LoginFindPwBtn>
           </LoginFind>
         </LoginSaveFind>
         <LoginKakao>
@@ -115,10 +139,11 @@ const LoginContainer = () => {
           <a href="#">카카오 로그인</a>
         </LoginKakao>
         <LoginSignup>
-          <p>EATIT이 처음이라면?</p>
-          <a href="#">회원가입</a>
+          <p>EatIt이 처음이라면?</p>
+          <LoginSignupbtn onClick={handleSignupClick}>회원가입</LoginSignupbtn>
         </LoginSignup>
       </StyledLogin>
+      <Footer />
     </div>
   );
 };
@@ -137,6 +162,7 @@ const StyledLogin = styled.div`
 `;
 
 const LoginTitle = styled.div`
+  color: black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -152,6 +178,7 @@ const LoginId = styled.div`
   width: 300px;
   margin-bottom: 20px;
   h3 {
+    color: #888888;
     font-weight: bold;
     margin-bottom: 3px;
   }
@@ -171,6 +198,7 @@ const LoginPw = styled.div`
   width: 300px;
   margin-bottom: 25px;
   h3 {
+    color: #888888;
     font-weight: bold;
     margin-bottom: 3px;
   }
@@ -188,22 +216,27 @@ const LoginPwVisibility = styled.div`
   justify-content: space-between;
 `;
 
+const PwVisibilityWrapper = styled.div`
+  position: relative;
+`;
+
 const PwVisibilityBtn = styled.button`
-  margin-left: 3px;
+  color: #808080;
+  margin-right: 3px;
   font-size: 12px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
-const LoginIdError = styled.div`
-  font-size: 12px;
-  color: red;
-`;
-
-const LoginPwError = styled.div`
+const LoginError = styled.div`
   font-size: 12px;
   color: red;
 `;
 
 const LoginSaveFind = styled.div`
+  color: #888888;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -220,7 +253,18 @@ const LoginSave = styled.div`
 `;
 
 const LoginFind = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const LoginFindIdBtn = styled.div`
   font-size: 13px;
+  cursor: pointer;
+`;
+const LoginFindPwBtn = styled.div`
+  margin-left: 5px;
+  font-size: 13px;
+  cursor: pointer;
 `;
 
 const LoginBtn = styled.button`
@@ -256,11 +300,14 @@ const LoginSignup = styled.div`
   justify-content: space-between;
   width: 300px;
   p {
+    color: #888888;
     font-size: 16px;
   }
-  a {
-    color: #978eff;
-    font-size: 16px;
-    font-weight: bold;
-  }
+`;
+
+const LoginSignupbtn = styled.div`
+  color: #978eff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 `;
