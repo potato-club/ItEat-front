@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Select, { ValueType, OptionTypeBase } from "react-select";
 import { useRouter } from "next/router";
-import Header from "../../components/Header";
-import Footer from "@/components/Footer";
+import Header from "../../components/header";
+import Footer from "@/components/footer";
 import PageButton from "./components/PageButton";
 import tags from "../../../public/data/tags.json";
 
