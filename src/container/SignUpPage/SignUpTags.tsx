@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Header from "../../components/Header";
-import Footer from "@/components/Footer";
 import { useForm } from "react-hook-form";
 import Select, { ValueType, OptionTypeBase } from "react-select";
-
+import { useRouter } from "next/router";
+import Header from "../../components/Header";
+import Footer from "@/components/Footer";
+import PageButton from "./components/PageButton";
 import tags from "../../../public/data/tags.json";
 
 function SignUpTags() {
@@ -14,8 +15,12 @@ function SignUpTags() {
 
   const [selectedTag, setSelectedTag] =
     useState<ValueType<OptionTypeBase> | null>(null);
+
+  // useRouter hook
+  const router = useRouter();
+
   const onSubmit = (data: any) => {
-    console.log("Selected Tag:", selectedTag);
+    router.push("/signup-page");
   };
 
   const options = tags.map((tag: any) => ({
@@ -64,6 +69,7 @@ function SignUpTags() {
             />
           </SelectContainer>
         </FormContainer>
+        <PageButton path="/signup/signup" />
       </Container>
       <Footer />
     </Wrapper>
