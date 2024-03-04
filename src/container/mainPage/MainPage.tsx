@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../components/Header";
+import Header from "../../components/header";
 import styled from "styled-components";
 import RecentProject from "./components/RecentContent";
 import PopularProject from "./components/PopularContent";
@@ -7,7 +7,6 @@ import PopularProject from "./components/PopularContent";
 const MainPage = () => {
   return (
     <>
-      <Header />
       <Wrapper>
         <Banner />
         <RecentProject />
