@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import Category from "../../components/Cetegory";
+import Router from "next/router";
 
 interface MenuTypes {
   $isSelected: boolean;
@@ -17,7 +18,9 @@ const MentoringPage = () => {
         <MenuBtn $isSelected={menuState === 1} onClick={() => setMenuState(1)}>
           멘티 구함
         </MenuBtn>
-        <WritingBtn>글쓰기</WritingBtn>
+        <WritingBtn onClick={() => Router.push("/writingPage")}>
+          글쓰기
+        </WritingBtn>
       </MenuBar>
       <Category />
       <PostWrapper>
@@ -127,6 +130,9 @@ const WritingBtn = styled.button`
   &:hover {
     background-color: #5649ea;
   }
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
 `;
 
 const PostWrapper = styled.div`
