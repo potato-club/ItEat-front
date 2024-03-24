@@ -69,7 +69,7 @@ const Category = () => {
           placeholder="키워드 추가"
           ref={focusRef}
         />
-        {/* {filteredTags.length > 0 && (
+        {filteredTags.length > 0 && (
           <FilteredTagWrapper>
             {filteredTags.map((tag, index) => (
               <FilteredTag key={index} onClick={() => handleTagClick(tag)}>
@@ -77,7 +77,7 @@ const Category = () => {
               </FilteredTag>
             ))}
           </FilteredTagWrapper>
-        )} */}
+        )}
       </div>
     </Wrapper>
   );
@@ -90,7 +90,7 @@ const Wrapper = styled.div`
   height: 300px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #bababa;
+  border: 2px solid #bababa;
   border-radius: 50px;
   padding: 30px;
   gap: 10px;
