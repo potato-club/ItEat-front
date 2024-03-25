@@ -90,6 +90,7 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 5%;
   justify-content: space-between;
+  border: 1px solid #d0d0d0;
 `;
 
 const Typo = styled.div`
