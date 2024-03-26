@@ -9,6 +9,9 @@ interface MenuTypes {
 
 const MentoringPage = () => {
   const [menuState, setMenuState] = useState<number>(0);
+  const PostClick = () => {
+    Router.push("/postPage");
+  };
   return (
     <Wrapper>
       <MenuBar>
@@ -24,7 +27,7 @@ const MentoringPage = () => {
       </MenuBar>
       <Category />
       <PostWrapper>
-        <PostBox>
+        <PostBox onClick={PostClick}>
           <TitleLine>
             <UserImage />
             <TitleWrapper>
@@ -152,6 +155,7 @@ const PostBox = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 30px;
+  cursor: pointer;
 `;
 const TitleLine = styled.div`
   width: 100%;
