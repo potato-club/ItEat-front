@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  --font-family: Arial, Helvetica, sans-serif; /* 웹 안전 폰트 지정 */
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -24,6 +25,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  font-family: var(--font-family); /* 폰트 패밀리 적용 */
 }
 
 @layer utilities {
