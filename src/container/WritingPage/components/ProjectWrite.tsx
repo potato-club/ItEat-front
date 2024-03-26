@@ -14,6 +14,9 @@ const ProjectWrite = () => {
         <DueInput type="date" />
       </DueBox>
       <WriterInfo placeholder="개인 연락처" />
+      <WriteButtonBox>
+        <WriteButton> 글 작성</WriteButton>
+      </WriteButtonBox>
     </Wrapper>
   );
 };
@@ -96,4 +99,21 @@ const WriterInfo = styled.input`
   padding: 0px 10px 0px 10px;
   height: 50px;
   color: black;
+`;
+const WriteButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+const WriteButton = styled.button`
+  width: 150px;
+  height: 50px;
+  background-color: #5649ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  border-radius: 30px;
 `;

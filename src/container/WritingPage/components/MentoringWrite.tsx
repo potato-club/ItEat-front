@@ -38,6 +38,9 @@ const MentoringWrite = () => {
         <DueInput type="date" />
       </DueBox>
       <WriterInfo placeholder="노션,깃허브 주소" />
+      <WriteButtonBox>
+        <WriteButton> 글 작성</WriteButton>
+      </WriteButtonBox>
     </Wrapper>
   );
 };
@@ -146,4 +149,21 @@ const MentoringInfo = styled.textarea`
   height: 300px;
   color: black;
   resize: none;
+`;
+const WriteButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+const WriteButton = styled.button`
+  width: 150px;
+  height: 50px;
+  background-color: #5649ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  border-radius: 30px;
 `;
