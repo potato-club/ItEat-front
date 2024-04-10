@@ -1,36 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Header from "../../components/header";
-import Footer from "@/components/footer";
 import { useForm } from "react-hook-form";
 
 function SignUpContainer() {
-  const { handleSubmit, register } = useForm({
+  const {
+    handleSubmit,
+    register,
+    watch,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
     mode: "onChange",
+    defaultValues: {
+      nickname: "",
+      email: "",
+      password: "",
+      checkPassword: "",
+    },
   });
 
-  const [isVerify, setIsVerify] = useState(false);
-  const [isPasswordChecked, setIsPasswordChecked] = useState(false);
+  // const [isPasswordChecked, setIsPasswordChecked] = useState(false);
+  const checkPassword = watch("checkPassword");
+  const password = watch("password");
 
-  const onSubmit = (data: any) => {
-    const { password, checkPassword } = data;
-
-    if (password !== checkPassword) {
-      console.log("비밀번호 확인이 일치하지 않습니다.");
+  useEffect(() => {
+    if (password !== checkPassword && checkPassword) {
+      setError("checkPassword", {
+        type: "password-mismatch",
+        message: "비밀번호가 일치하지 않습니다",
+      });
     } else {
-      //
+      clearErrors("checkPassword"); // 비밀번호가 일치하면 오류 제거
     }
-  };
+  }, [password, checkPassword, setError, clearErrors]);
+
+  const onSubmit = (data: any) => {};
 
   return (
     <Wrapper>
-      <Header />
       <Container>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <Title>회원가입</Title>
           <InputField>
             <Input
-              {...register("nickname")}
+              {...register("nickname", { required: true })}
               placeholder="이름을 입력하세요."
               name="nickname"
               type="text"
@@ -38,7 +52,7 @@ function SignUpContainer() {
           </InputField>
           <InputField>
             <Input
-              {...register("email")}
+              {...register("email", { required: true })}
               placeholder="이메일을 입력하세요."
               name="email"
               type="email"
@@ -46,7 +60,12 @@ function SignUpContainer() {
           </InputField>
           <InputField>
             <Input
-              {...register("password")}
+              {...register("password", {
+                required: "비밀번호를 입력하세요.",
+                validate: (value) =>
+                  value === watch("checkPassword") ||
+                  "비밀번호가 일치하지 않습니다.",
+              })}
               placeholder="비밀번호를 입력하세요."
               type="password"
               name="password"
@@ -54,7 +73,12 @@ function SignUpContainer() {
           </InputField>
           <InputField>
             <Input
-              {...register("checkPassword")}
+              {...register("checkPassword", {
+                required: "비밀번호를 다시 입력하세요.",
+                validate: (value) =>
+                  value === watch("password") ||
+                  "비밀번호가 일치하지 않습니다.",
+              })}
               placeholder="비밀번호를 다시 입력하세요."
               type="password"
               name="checkPassword"
@@ -65,7 +89,6 @@ function SignUpContainer() {
           <SocialButton type="button">카카오로 시작하기</SocialButton>
         </FormContainer>
       </Container>
-      <Footer />
     </Wrapper>
   );
 }
