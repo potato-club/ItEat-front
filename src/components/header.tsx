@@ -27,6 +27,10 @@ const Header = () => {
     setMenuState(2);
     router.push("/mentoringPage");
   };
+  const communityClick = () => {
+    setMenuState(3);
+    router.push("/communityPage");
+  };
 
   return (
     <>
@@ -57,10 +61,7 @@ const Header = () => {
           <MenuDiv $isSelected={menuState === 2} onClick={mentoringClick}>
             멘토링
           </MenuDiv>
-          <MenuDiv
-            $isSelected={menuState === 3}
-            onClick={() => setMenuState(3)}
-          >
+          <MenuDiv $isSelected={menuState === 3} onClick={communityClick}>
             커뮤니티
           </MenuDiv>
         </MenuWrapper>

@@ -85,8 +85,6 @@ function SignUpContainer() {
             />
           </InputField>
           <SubmitButton type="submit">가입하기</SubmitButton>
-          <OrText>Or 소셜로그인</OrText>
-          <SocialButton type="button">카카오로 시작하기</SocialButton>
         </FormContainer>
       </Container>
     </Wrapper>
@@ -159,19 +157,5 @@ const SubmitButton = styled.button`
 
   &:hover {
     background-color: #453ac4;
-  }
-`;
-
-const OrText = styled.div`
-  font-size: 15px;
-  margin-bottom: 15px;
-`;
-
-const SocialButton = styled(SubmitButton)`
-  background-color: #fee500;
-  color: black;
-
-  &:hover {
-    background-color: #e0cb08;
   }
 `;
