@@ -15,9 +15,10 @@ function SignUpTags() {
 
   const router = useRouter();
 
-  const onSubmit = (data: any) => {
-    router.push("/signup-page");
-  };
+  // //추후 수정
+  // const onSubmit = (data: any) => {
+  //   router.push("/signupPage");
+  // };
 
   const options = tags.map((tag: any) => ({
     value: tag.name,
