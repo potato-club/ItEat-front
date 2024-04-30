@@ -1,0 +1,157 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import postsData from "../../../public/data/posts.json";
+
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  viewCount: number;
+}
+
+interface MenuTypes {
+  $isSelected: boolean;
+}
+
+const categories = ["전체글", "질문", "정보", "잡담", "기타"];
+
+const CommunityPage: React.FC = () => {
+  const posts: Post[] = postsData as Post[];
+  const [cateState, setCateState] = useState<number>(0);
+  const hotPosts = posts.filter((post) => post.viewCount >= 140).slice(0, 5); // 상위 5개만 선택
+
+  return (
+    <Wrapper>
+      <HotPostsTitle> 인기글 </HotPostsTitle>
+      <HotPostsContainer>
+        {hotPosts.map((post) => (
+          <HotPost key={post.id}>
+            <HotPostTitle>{post.title}</HotPostTitle>
+            <HotPostInfo>
+              작성자: {post.author} | 날짜: {post.date} | 조회수:
+              {post.viewCount}
+            </HotPostInfo>
+          </HotPost>
+        ))}
+      </HotPostsContainer>
+      <Separator />
+      <CateBtnWrapper>
+        {categories.map((category, index) => (
+          <CateBtn
+            key={index}
+            $isSelected={cateState === index}
+            onClick={() => setCateState(index)}
+          >
+            {category}
+          </CateBtn>
+        ))}
+      </CateBtnWrapper>
+
+      <Table>
+        <thead>
+          <PostInfo>
+            {Object.keys(posts[0]).map((key) => (
+              <PostColumn key={key}>{key}</PostColumn>
+            ))}
+          </PostInfo>
+        </thead>
+        <tbody>
+          {posts.map((post) => (
+            <PostInfo key={post.id}>
+              {Object.values(post).map((value, index) => (
+                <PostCell key={index}>{value}</PostCell>
+              ))}
+            </PostInfo>
+          ))}
+        </tbody>
+      </Table>
+    </Wrapper>
+  );
+};
+
+export default CommunityPage;
+
+const Wrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Separator = styled.hr`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const HotPostsContainer = styled.div`
+  width: 60%;
+  margin-bottom: 20px;
+  border: 2px solid #dddddd;
+  border-radius: 30px;
+`;
+
+const CateBtn = styled.button<MenuTypes>`
+  width: 80px;
+  color: ${(props) => (props.$isSelected ? "#5649ea" : "#B6B6B6")};
+  font-size: 20px;
+  font-weight: 600;
+`;
+
+const CateBtnWrapper = styled.div`
+  width: 60%;
+  display: flex;
+  margin-top: 50px;
+  margin-bottom: 30px;
+`;
+
+const HotPostsTitle = styled.h2`
+  font-size: 25px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: left;
+`;
+
+const HotPost = styled.div`
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+`;
+
+const HotPostTitle = styled.h3`
+  font-size: 20px;
+  color: #000000;
+`;
+
+const HotPostInfo = styled.p`
+  font-size: 15px;
+  color: #555;
+`;
+
+const Table = styled.table`
+  width: 60%;
+  border-collapse: collapse;
+`;
+
+const PostInfo = styled.tr`
+  background-color: #bebebe;
+  color: black;
+`;
+
+const PostColumn = styled.th`
+  padding: 10px;
+  text-align: left;
+  background-color: #bebebe;
+  color: white;
+`;
+
+const PostCell = styled.td`
+  padding: 10px;
+  background-color: white;
+`;

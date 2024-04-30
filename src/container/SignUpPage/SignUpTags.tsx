@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Select, { ValueType, OptionTypeBase } from "react-select";
 import { useRouter } from "next/router";
-import Header from "../../components/header";
-import Footer from "@/components/footer";
-import PageButton from "./components/PageButton";
 import tags from "../../../public/data/tags.json";
 
 function SignUpTags() {
@@ -16,12 +13,12 @@ function SignUpTags() {
   const [selectedTag, setSelectedTag] =
     useState<ValueType<OptionTypeBase> | null>(null);
 
-  // useRouter hook
   const router = useRouter();
 
-  const onSubmit = (data: any) => {
-    router.push("/signup-page");
-  };
+  // //추후 수정
+  // const onSubmit = (data: any) => {
+  //   router.push("/signupPage");
+  // };
 
   const options = tags.map((tag: any) => ({
     value: tag.name,
@@ -52,7 +49,6 @@ function SignUpTags() {
 
   return (
     <Wrapper>
-      <Header />
       <Container>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <Title>회원가입</Title>
@@ -69,9 +65,7 @@ function SignUpTags() {
             />
           </SelectContainer>
         </FormContainer>
-        <PageButton path="/signup/signup" />
       </Container>
-      <Footer />
     </Wrapper>
   );
 }
