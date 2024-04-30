@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import postsData from "../../../public/data/posts.json";
 
@@ -11,46 +11,59 @@ interface Post {
   viewCount: number;
 }
 
+interface MenuTypes {
+  $isSelected: boolean;
+}
+
+const categories = ["전체글", "질문", "정보", "잡담", "기타"];
+
 const CommunityPage: React.FC = () => {
   const posts: Post[] = postsData as Post[];
-  const hotPosts = posts.filter((post) => post.viewCount >= 140);
+  const [cateState, setCateState] = useState<number>(0);
+  const hotPosts = posts.filter((post) => post.viewCount >= 140).slice(0, 5); // 상위 5개만 선택
 
   return (
     <Wrapper>
-      <Title>커뮤니티 페이지</Title>
-      <Separator />
+      <HotPostsTitle> 인기글 </HotPostsTitle>
       <HotPostsContainer>
-        <HotPostsTitle>Hot 게시글</HotPostsTitle>
         {hotPosts.map((post) => (
           <HotPost key={post.id}>
             <HotPostTitle>{post.title}</HotPostTitle>
             <HotPostInfo>
-              작성자: {post.author} | 날짜: {post.date} | 조회수:{" "}
+              작성자: {post.author} | 날짜: {post.date} | 조회수:
               {post.viewCount}
             </HotPostInfo>
           </HotPost>
         ))}
       </HotPostsContainer>
       <Separator />
+      <CateBtnWrapper>
+        {categories.map((category, index) => (
+          <CateBtn
+            key={index}
+            $isSelected={cateState === index}
+            onClick={() => setCateState(index)}
+          >
+            {category}
+          </CateBtn>
+        ))}
+      </CateBtnWrapper>
+
       <Table>
         <thead>
-          <tr>
-            <Th>글 ID</Th>
-            <Th>제목</Th>
-            <Th>작성자</Th>
-            <Th>날짜</Th>
-            <Th>조회수</Th>
-          </tr>
+          <PostInfo>
+            {Object.keys(posts[0]).map((key) => (
+              <PostColumn key={key}>{key}</PostColumn>
+            ))}
+          </PostInfo>
         </thead>
         <tbody>
           {posts.map((post) => (
-            <tr key={post.id}>
-              <Td>{post.id}</Td>
-              <Td>{post.title}</Td>
-              <Td>{post.author}</Td>
-              <Td>{post.date}</Td>
-              <Td>{post.viewCount}</Td>
-            </tr>
+            <PostInfo key={post.id}>
+              {Object.values(post).map((value, index) => (
+                <PostCell key={index}>{value}</PostCell>
+              ))}
+            </PostInfo>
           ))}
         </tbody>
       </Table>
@@ -63,18 +76,12 @@ export default CommunityPage;
 const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: #f2f2f2;
+  background-color: white;
   color: black;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  color: black;
-  margin-bottom: 20px;
 `;
 
 const Separator = styled.hr`
@@ -85,28 +92,45 @@ const Separator = styled.hr`
 const HotPostsContainer = styled.div`
   width: 60%;
   margin-bottom: 20px;
+  border: 2px solid #dddddd;
+  border-radius: 30px;
+`;
+
+const CateBtn = styled.button<MenuTypes>`
+  width: 80px;
+  color: ${(props) => (props.$isSelected ? "#5649ea" : "#B6B6B6")};
+  font-size: 20px;
+  font-weight: 600;
+`;
+
+const CateBtnWrapper = styled.div`
+  width: 60%;
+  display: flex;
+  margin-top: 50px;
+  margin-bottom: 30px;
 `;
 
 const HotPostsTitle = styled.h2`
-  font-size: 1.8rem;
+  font-size: 25px;
+  font-weight: 600;
   color: #333;
   margin-bottom: 10px;
+  text-align: left;
 `;
 
 const HotPost = styled.div`
-  background-color: #ffeded;
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
 `;
 
 const HotPostTitle = styled.h3`
-  font-size: 1.4rem;
+  font-size: 20px;
   color: #000000;
 `;
 
 const HotPostInfo = styled.p`
-  font-size: 1rem;
+  font-size: 15px;
   color: #555;
 `;
 
@@ -115,14 +139,19 @@ const Table = styled.table`
   border-collapse: collapse;
 `;
 
-const Th = styled.th`
+const PostInfo = styled.tr`
+  background-color: #bebebe;
+  color: black;
+`;
+
+const PostColumn = styled.th`
   padding: 10px;
   text-align: left;
   background-color: #bebebe;
   color: white;
 `;
 
-const Td = styled.td`
+const PostCell = styled.td`
   padding: 10px;
   background-color: white;
 `;
