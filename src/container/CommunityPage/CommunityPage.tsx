@@ -24,19 +24,18 @@ const CommunityPage: React.FC = () => {
 
   return (
     <Wrapper>
-      <HotPostsTitle> 인기글 </HotPostsTitle>
       <HotPostsContainer>
+        <HotPostsTitle> 인기글 </HotPostsTitle>
+
         {hotPosts.map((post) => (
           <HotPost key={post.id}>
             <HotPostTitle>{post.title}</HotPostTitle>
             <HotPostInfo>
-              작성자: {post.author} | 날짜: {post.date} | 조회수:
-              {post.viewCount}
+              날짜: {post.date} | 작성자: {post.author}
             </HotPostInfo>
           </HotPost>
         ))}
       </HotPostsContainer>
-      <Separator />
       <CateBtnWrapper>
         {categories.map((category, index) => (
           <CateBtn
@@ -84,18 +83,6 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Separator = styled.hr`
-  width: 100%;
-  margin-bottom: 20px;
-`;
-
-const HotPostsContainer = styled.div`
-  width: 60%;
-  margin-bottom: 20px;
-  border: 2px solid #dddddd;
-  border-radius: 30px;
-`;
-
 const CateBtn = styled.button<MenuTypes>`
   width: 80px;
   color: ${(props) => (props.$isSelected ? "#5649ea" : "#B6B6B6")};
@@ -110,30 +97,39 @@ const CateBtnWrapper = styled.div`
   margin-bottom: 30px;
 `;
 
+const HotPostsContainer = styled.div`
+  width: 60%;
+  border-radius: 30px;
+  padding: 20px;
+`;
+
 const HotPostsTitle = styled.h2`
   font-size: 25px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   text-align: left;
+  font-weight: bold;
 `;
 
 const HotPost = styled.div`
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 5px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
 `;
-
 const HotPostTitle = styled.h3`
+  flex: 1;
   font-size: 20px;
-  color: #000000;
+  color: #333333;
+  margin-right: 10px;
 `;
 
 const HotPostInfo = styled.p`
   font-size: 15px;
-  color: #555;
+  color: #666666;
 `;
-
 const Table = styled.table`
   width: 60%;
   border-collapse: collapse;
