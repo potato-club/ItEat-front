@@ -30,18 +30,17 @@ const LoginContainer = () => {
     };
 
     try {
-      // const response = await axios.post("https://eat--it.shop/client/login", {
-      //   email: data.email,
-      //   password: data.password,
-      // });
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/posts",
-        {
-          email: data.email,
-          password: data.password,
-        }
-      );
-      console.log("=================", response);
+      const response = await axios.post("https://eat--it.shop/client/login", {
+        email: data.email,
+        password: data.password,
+      });
+      // const response = await axios.post(
+      //   "https://jsonplaceholder.typicode.com/posts",
+      //   {
+      //     email: data.email,
+      //     password: data.password,
+      //   }
+      // );
       if (response.data.success) {
         alert("로그인 되었습니다!");
         router.push("/login/loginmypage");
@@ -54,14 +53,16 @@ const LoginContainer = () => {
       alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
 
+    /////
     if (errStack >= 4) {
       alert("비밀번호를 5회 이상 틀리셨습니다. 30초 동안 잠금 처리됩니다.");
       setLoginDisabled(true);
       setTimeout(() => {
         setErrStack(0);
         setLoginDisabled(false);
-      }, 30000);
+      }, 30000); // 백엔드에서 처리
     }
+    /////
   };
 
   const handlePasswordVisibility = () => {

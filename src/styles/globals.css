@@ -5,27 +5,12 @@
 :root {
   --font-family: Arial, Helvetica, sans-serif; /* 웹 안전 폰트 지정 */
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --background-color: 255, 255, 255; /* Set to plain white */
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  font-family: var(--font-family); /* 폰트 패밀리 적용 */
+  background: rgb(var(--background-color));
 }
 
 @layer utilities {

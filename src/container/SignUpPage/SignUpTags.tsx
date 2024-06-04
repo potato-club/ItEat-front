@@ -50,21 +50,21 @@ function SignUpTags() {
   return (
     <Wrapper>
       <Container>
-        <FormContainer onSubmit={handleSubmit(onSubmit)}>
-          <Title>회원가입</Title>
-          <SelectContainer>
-            <Select
-              options={options}
-              value={selectedTag}
-              onChange={(selectedOption) =>
-                setSelectedTag(selectedOption as ValueType<OptionTypeBase>)
-              }
-              isMulti
-              placeholder="원하는 태그를 선택해주세요"
-              styles={customStyles}
-            />
-          </SelectContainer>
-        </FormContainer>
+        {/* <FormContainer onSubmit={}> */}
+        <Title>회원가입</Title>
+        <SelectContainer>
+          <Select
+            options={options}
+            value={selectedTag}
+            onChange={(selectedOption) =>
+              setSelectedTag(selectedOption as ValueType<OptionTypeBase>)
+            }
+            isMulti
+            placeholder="원하는 태그를 선택해주세요"
+            styles={customStyles}
+          />
+        </SelectContainer>
+        {/* </FormContainer> */}
       </Container>
     </Wrapper>
   );
