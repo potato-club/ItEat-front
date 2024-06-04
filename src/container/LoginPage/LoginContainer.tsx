@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import React, { useState } from "react";
-import Header from "../../components/Header";
+import Header from "../../components/header";
 import Footer from "../../components/footer";
-import Image from "next/image";
+import Nextimage from "next/image";
 import KakaoImage from "../../../public/LoginImage/Kakao.png";
-import router, { Router } from "next/router";
+import router from "next/router";
+import axios from "axios";
 
 const LoginContainer = () => {
   const {
@@ -17,17 +18,40 @@ const LoginContainer = () => {
   const [loginDisabled, setLoginDisabled] = useState(false);
   const [errStack, setErrStack] = useState(0);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     if (loginDisabled) {
       alert("잠시 후 다시 시도해주세요.");
       return;
     }
 
-    if (data.email === "hoo6710@naver.com" && data.password === "jiho0419") {
-      alert("로그인 되었습니다!");
-    } else {
-      alert("아이디와 비밀번호를 다시 한 번 확인해주세요!");
-      setErrStack((prev) => prev + 1);
+    const userData = {
+      email: "hoo6710@naver.com",
+      password: "jiho0419",
+    };
+
+    try {
+      // const response = await axios.post("https://eat--it.shop/client/login", {
+      //   email: data.email,
+      //   password: data.password,
+      // });
+      const response = await axios.post(
+        "https://jsonplaceholder.typicode.com/posts",
+        {
+          email: data.email,
+          password: data.password,
+        }
+      );
+      console.log("=================", response);
+      if (response.data.success) {
+        alert("로그인 되었습니다!");
+        router.push("/login/loginmypage");
+      } else {
+        alert("아이디와 비밀번호를 다시 한 번 확인해주세요!");
+        setErrStack((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("서버 오류가 발생했습니다.", error);
+      alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
 
     if (errStack >= 4) {
@@ -75,7 +99,8 @@ const LoginContainer = () => {
               {...register("email", {
                 required: "이메일을 입력하세요.",
                 pattern: {
-                  value: /\S+@\S+\.\S+/,
+                  value:
+                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
                   message: "올바른 이메일 형식이 아닙니다.",
                 },
               })}
@@ -135,7 +160,7 @@ const LoginContainer = () => {
           </LoginFind>
         </LoginSaveFind>
         <LoginKakao>
-          <Image width={20} height={20} src={KakaoImage} />
+          <Nextimage width={20} height={20} src={KakaoImage} alt="kakaoimage" />
           <a href="#">카카오 로그인</a>
         </LoginKakao>
         <LoginSignup>
@@ -210,12 +235,6 @@ const LoginPw = styled.div`
     outline: none;
   }
 `;
-const LoginPwVisibility = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
 const PwVisibilityWrapper = styled.div`
   position: relative;
 `;
