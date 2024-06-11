@@ -5,10 +5,12 @@ import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Nextimage from "next/image";
 import KakaoImage from "../../../public/LoginImage/Kakao.png";
-import router from "next/router";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import axios from "axios";
 
 const LoginContainer = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -24,23 +26,16 @@ const LoginContainer = () => {
       return;
     }
 
-    const userData = {
-      email: "hoo6710@naver.com",
-      password: "jiho0419",
-    };
-
     try {
-      const response = await axios.post("https://eat--it.shop/client/login", {
+      const response = await axios.post(`https://eat--it.shop/client/login`, {
         email: data.email,
         password: data.password,
       });
-      // const response = await axios.post(
-      //   "https://jsonplaceholder.typicode.com/posts",
-      //   {
-      //     email: data.email,
-      //     password: data.password,
-      //   }
-      // );
+
+      if (response.status === 200) {
+        alert("로그인 되었습니다!");
+        router.push("/login/loginmypage");
+      }
       if (response.data.success) {
         alert("로그인 되었습니다!");
         router.push("/login/loginmypage");
@@ -53,7 +48,7 @@ const LoginContainer = () => {
       alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
 
-    /////
+    ///
     if (errStack >= 4) {
       alert("비밀번호를 5회 이상 틀리셨습니다. 30초 동안 잠금 처리됩니다.");
       setLoginDisabled(true);
@@ -62,7 +57,7 @@ const LoginContainer = () => {
         setLoginDisabled(false);
       }, 30000); // 백엔드에서 처리
     }
-    /////
+    ///
   };
 
   const handlePasswordVisibility = () => {
@@ -81,14 +76,96 @@ const LoginContainer = () => {
     router.push("/signup/signup");
   };
 
+  const handleKakaoLoginClick = () => {
+    const REST_API_KEY = "8f181a8abe562d8ad06273017a01a79b";
+    const REDIRECT_URI = "http://localhost:3000/redirecthandler";
+    const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+    window.location.href = link;
+  };
+
   const LoginError: React.FC<{ children: any }> = ({ children }) => (
     <div style={{ fontSize: "12px", color: "red" }}>{children}</div>
   );
+  useEffect(() => {
+    const fetchKakaoToken = async (code: string) => {
+      try {
+        const response = await axios.post(
+          `https://kauth.kakao.com/oauth/token`,
+          new URLSearchParams({
+            grant_type: "authorization_code",
+            client_id: "8f181a8abe562d8ad06273017a01a79b",
+            redirect_uri: "http://localhost:3000/redirecthandler",
+            code,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
+
+        const { access_token } = response.data;
+
+        // Here you can use the access_token to fetch user information from Kakao API
+        const userResponse = await axios.get(
+          "https://kapi.kakao.com/v2/user/me",
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+
+        console.log(userResponse.data); // User information
+
+        alert("카카오 로그인 성공!");
+        router.push("/login/loginmypage");
+      } catch (error) {
+        console.error("카카오 토큰 요청 오류", error);
+        alert("카카오 로그인 실패");
+      }
+    };
+
+    if (router.query.code) {
+      fetchKakaoToken(router.query.code as string);
+    }
+  }, [router]);
+  // useEffect(() => {
+  //   const fetchKakaoToken = async (code: string) => {
+  //     try {
+  //       const response = await axios.post(
+  //         `https://kauth.kakao.com/oauth/token`,
+  //         new URLSearchParams({
+  //           grant_type: "authorization_code",
+  //           client_id: process.env.NEXT_PUBLIC_REST_API_KEY as string,
+  //           redirect_uri: "http://localhost:3000/redirecthandler",
+  //           code,
+  //         }),
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           maxRedirects: 0, // 리디렉션을 따르지 않도록 설정
+  //           withCredentials: true,
+  //         }
+  //       );
+
+  //       alert("카카오 로그인 성공!");
+  //       router.push("/login/loginmypage");
+  //     } catch (error) {
+  //       console.error("카카오 토큰 요청 오류", error);
+  //       alert("카카오 로그인 실패");
+  //     }
+  //   };
+
+  //   if (router.query.code) {
+  //     fetchKakaoToken(router.query.code as string);
+  //   }
+  // }, [router]);
 
   return (
     <div>
-      <Header />
-
       <StyledLogin>
         <LoginTitle>로그인</LoginTitle>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -160,9 +237,9 @@ const LoginContainer = () => {
             </LoginFindPwBtn>
           </LoginFind>
         </LoginSaveFind>
-        <LoginKakao>
+        <LoginKakao onClick={handleKakaoLoginClick}>
           <Nextimage width={20} height={20} src={KakaoImage} alt="kakaoimage" />
-          <a href="#">카카오 로그인</a>
+          <KakaoLoginbar>카카오 로그인</KakaoLoginbar>
         </LoginKakao>
         <LoginSignup>
           <p>EatIt이 처음이라면?</p>
@@ -175,7 +252,11 @@ const LoginContainer = () => {
 };
 
 export default LoginContainer;
-
+const KakaoLoginbar = styled.div`
+  display: flex;
+  margin-left: 5px;
+  cursor: pointer;
+`;
 const StyledLogin = styled.div`
   display: flex;
   flex-direction: column;
