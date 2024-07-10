@@ -32,11 +32,7 @@ const LoginContainer = () => {
         password: data.password,
       });
 
-      if (response.status === 200) {
-        alert("로그인 되었습니다!");
-        router.push("/login/loginmypage");
-      }
-      if (response.data.success) {
+      if (response.status === 200 || response.data.success) {
         alert("로그인 되었습니다!");
         router.push("/login/loginmypage");
       } else {
@@ -107,7 +103,6 @@ const LoginContainer = () => {
 
         const { access_token } = response.data;
 
-        // Here you can use the access_token to fetch user information from Kakao API
         const userResponse = await axios.get(
           "https://kapi.kakao.com/v2/user/me",
           {
