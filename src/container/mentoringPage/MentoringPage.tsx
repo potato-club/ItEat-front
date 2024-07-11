@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 import Category from "../../components/Cetegory";
 import Router from "next/router";
-
+import Tags from "./components/Tags";
 interface MenuTypes {
   $isSelected: boolean;
 }
@@ -10,7 +10,7 @@ interface MenuTypes {
 const MentoringPage = () => {
   const [menuState, setMenuState] = useState<number>(0);
   const PostClick = () => {
-    Router.push("/postPage");
+    Router.push("/detailPostPage");
   };
   return (
     <Wrapper>
@@ -25,7 +25,7 @@ const MentoringPage = () => {
           글쓰기
         </WritingBtn>
       </MenuBar>
-      <Category />
+
       <PostWrapper>
         <PostBox onClick={PostClick}>
           <TitleLine>

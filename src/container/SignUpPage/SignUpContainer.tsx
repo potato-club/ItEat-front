@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useSignUp } from "@/hooks/useSignUp";
+import { signUp } from "@/api/controller/signUp";
 
 function SignUpContainer() {
   const {
@@ -20,7 +22,6 @@ function SignUpContainer() {
     },
   });
 
-  // const [isPasswordChecked, setIsPasswordChecked] = useState(false);
   const checkPassword = watch("checkPassword");
   const password = watch("password");
 
@@ -31,12 +32,21 @@ function SignUpContainer() {
         message: "비밀번호가 일치하지 않습니다",
       });
     } else {
-      clearErrors("checkPassword"); // 비밀번호가 일치하면 오류 제거
+      clearErrors("checkPassword");
     }
   }, [password, checkPassword, setError, clearErrors]);
 
-  const onSubmit = (data: any) => {};
+  const onSubmit = async (data: any) => {
+    const { nickname, email, password } = data;
+    const tags = "html";
 
+    try {
+      await signUp(nickname, email, password, tags);
+      alert("회원가입에 성공하였습니다");
+    } catch (error) {
+      alert("회원가입 중 오류가 발생했습니다");
+    }
+  };
   return (
     <Wrapper>
       <Container>
@@ -44,45 +54,55 @@ function SignUpContainer() {
           <Title>회원가입</Title>
           <InputField>
             <Input
-              {...register("nickname", { required: true })}
+              {...register("nickname", { required: "이름을 입력하세요." })}
               placeholder="이름을 입력하세요."
               name="nickname"
               type="text"
             />
+            {errors.nickname && (
+              <ErrorMessage>{errors.nickname.message}</ErrorMessage>
+            )}
           </InputField>
           <InputField>
             <Input
-              {...register("email", { required: true })}
+              {...register("email", { required: "이메일을 입력하세요." })}
               placeholder="이메일을 입력하세요."
               name="email"
               type="email"
             />
+            {errors.email && (
+              <ErrorMessage>{errors.email.message}</ErrorMessage>
+            )}
           </InputField>
           <InputField>
             <Input
               {...register("password", {
                 required: "비밀번호를 입력하세요.",
-                validate: (value) =>
-                  value === watch("checkPassword") ||
-                  "비밀번호가 일치하지 않습니다.",
+                minLength: {
+                  value: 8,
+                  message: "비밀번호는 최소 8자 이상이어야 합니다.",
+                },
               })}
               placeholder="비밀번호를 입력하세요."
               type="password"
               name="password"
             />
+            {errors.password && (
+              <ErrorMessage>{errors.password.message}</ErrorMessage>
+            )}
           </InputField>
           <InputField>
             <Input
               {...register("checkPassword", {
                 required: "비밀번호를 다시 입력하세요.",
-                validate: (value) =>
-                  value === watch("password") ||
-                  "비밀번호가 일치하지 않습니다.",
               })}
               placeholder="비밀번호를 다시 입력하세요."
               type="password"
               name="checkPassword"
             />
+            {errors.checkPassword && (
+              <ErrorMessage>{errors.checkPassword.message}</ErrorMessage>
+            )}
           </InputField>
           <SubmitButton type="submit">가입하기</SubmitButton>
         </FormContainer>
@@ -127,9 +147,11 @@ const FormContainer = styled.form`
   align-items: center;
   flex-direction: column;
 `;
+
 const InputField = styled.div`
   margin-bottom: 15px;
 `;
+
 const Input = styled.input`
   width: 300px;
   padding: 10px;
@@ -158,4 +180,11 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: #453ac4;
   }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 5px;
 `;

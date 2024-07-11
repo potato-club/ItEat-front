@@ -84,6 +84,7 @@ const Header = () => {
 export default Header;
 
 const Wrapper = styled.div`
+  position: relative;
   width: 100%;
   height: 100px;
   background-color: white;

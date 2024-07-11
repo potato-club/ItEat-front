@@ -36,13 +36,13 @@ const LoginContainer = () => {
         alert("로그인 되었습니다!");
         router.push("/login/loginmypage");
       }
-      if (response.data.success) {
-        alert("로그인 되었습니다!");
-        router.push("/login/loginmypage");
-      } else {
-        alert("아이디와 비밀번호를 다시 한 번 확인해주세요!");
-        setErrStack((prev) => prev + 1);
-      }
+      // if (response.data.success) {
+      //   alert("로그인 되었습니다!");
+      //   router.push("/login/loginmypage");
+      // } else {
+      //   alert("아이디와 비밀번호를 다시 한 번 확인해주세요!");
+      //   setErrStack((prev) => prev + 1);
+      // }
     } catch (error) {
       console.error("서버 오류가 발생했습니다.", error);
       alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
@@ -196,14 +196,14 @@ const LoginContainer = () => {
                 placeholder="비밀번호를 입력해주세요."
                 {...register("password", {
                   required: "비밀번호를 입력하세요.",
-                  minLength: {
-                    value: 8,
-                    message: "영문+숫자 조합 8자 이상 입력해주세요.",
-                  },
-                  pattern: {
-                    value: /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
-                    message: "영문+숫자 조합 8자 이상 입력해주세요.",
-                  },
+                  // minLength: {
+                  //   value: 8,
+                  //   message: "영문+숫자 조합 8자 이상 입력해주세요.",
+                  // },
+                  // pattern: {
+                  //   value: /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
+                  //   message: "영문+숫자 조합 8자 이상 입력해주세요.",
+                  // },
                 })}
                 style={{
                   border: errors.password
